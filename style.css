@@ -1,0 +1,330 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+  color: #f5f7ff;
+  background:
+    radial-gradient(circle at 20% 10%, rgba(111, 66, 255, 0.38), transparent 35%),
+    radial-gradient(circle at 80% 20%, rgba(0, 219, 255, 0.24), transparent 30%),
+    linear-gradient(135deg, #090b18 0%, #14182c 55%, #080912 100%);
+}
+
+button {
+  font: inherit;
+}
+
+.app {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 42px 0;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #9ea7ff;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 12px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(42px, 7vw, 86px);
+  line-height: 0.95;
+}
+
+.subtitle {
+  color: #c6cae6;
+  font-size: 18px;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+.mode-card,
+.panel {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.075);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.3);
+  border-radius: 28px;
+}
+
+.mode-card {
+  min-height: 230px;
+  padding: 32px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.mode-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(154, 166, 255, 0.8);
+  background: rgba(255, 255, 255, 0.11);
+}
+
+.mode-card span {
+  display: block;
+  font-size: 54px;
+  margin-bottom: 22px;
+}
+
+.mode-card strong {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+
+.mode-card small {
+  display: block;
+  color: #c7cbea;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.panel {
+  padding: 24px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.topline {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.topline h2 {
+  margin: 0;
+  font-size: 28px;
+}
+
+.ghost-btn,
+.primary-btn {
+  border: 0;
+  border-radius: 16px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.ghost-btn {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.primary-btn {
+  padding: 14px 22px;
+  background: linear-gradient(135deg, #7b5cff, #00c2ff);
+  font-weight: 700;
+}
+
+.hint,
+.legend {
+  color: #c8cceb;
+}
+
+.reaction-button {
+  width: min(100%, 520px);
+  height: 170px;
+  display: block;
+  margin: 26px auto;
+  border: 0;
+  border-radius: 28px;
+  background: linear-gradient(135deg, #5b5f7c, #2b2f49);
+  color: #fff;
+  font-size: 34px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.reaction-button.ready {
+  background: linear-gradient(135deg, #1fe36d, #0b9f44);
+}
+
+.reaction-button.waiting {
+  background: linear-gradient(135deg, #d24848, #8a1d1d);
+}
+
+.reaction-button:active {
+  transform: scale(0.98);
+}
+
+.result {
+  text-align: center;
+  font-size: 24px;
+  min-height: 34px;
+}
+
+.hud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.hud div {
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.arena {
+  position: relative;
+  overflow: hidden;
+  height: min(66vh, 620px);
+  min-height: 420px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px),
+    radial-gradient(circle at 50% 100%, rgba(98, 70, 234, 0.35), transparent 42%),
+    #080b16;
+  background-size: 44px 44px, 44px 44px, auto, auto;
+  touch-action: none;
+  user-select: none;
+}
+
+.arena-message {
+  position: absolute;
+  z-index: 20;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(5, 6, 14, 0.76);
+}
+
+.arena-message strong {
+  font-size: 34px;
+}
+
+.arena-message span {
+  max-width: 520px;
+  color: #d2d5ee;
+}
+
+.item {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  font-size: calc(var(--size) * 0.56);
+  cursor: pointer;
+  user-select: none;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  z-index: 5;
+}
+
+.item::before {
+  content: "";
+  position: absolute;
+  inset: -22px;
+  border-radius: inherit;
+}
+
+.item--normal {
+  background: radial-gradient(circle at 35% 25%, #fff89a, #ff9b21 46%, #a94316 100%);
+  box-shadow: 0 10px 26px rgba(255, 139, 29, 0.34);
+}
+
+.item--bomb {
+  background: radial-gradient(circle at 35% 25%, #4f5368, #151722 58%, #050509 100%);
+  box-shadow: 0 10px 30px rgba(255, 38, 38, 0.35);
+}
+
+.item--heal {
+  background: radial-gradient(circle at 35% 25%, #d8ffe4, #38e379 48%, #137a3b 100%);
+  box-shadow: 0 10px 30px rgba(50, 235, 116, 0.38);
+}
+
+.item--curse {
+  background: radial-gradient(circle at 35% 25%, #e6d4ff, #8b38ff 48%, #2c0b55 100%);
+  box-shadow: 0 10px 30px rgba(145, 50, 255, 0.42);
+}
+
+.item--flash {
+  background:
+    radial-gradient(circle at 35% 25%, rgba(255,255,255,0.95), rgba(155,170,178,0.9) 45%, rgba(38,46,55,0.95) 100%);
+  border-radius: 50%;
+  overflow: hidden;
+  padding: calc(var(--size) * 0.12);
+  box-shadow:
+    0 0 0 3px rgba(255, 255, 255, 0.72),
+    0 10px 30px rgba(255, 255, 255, 0.34);
+}
+
+.item--flash img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 7px 9px rgba(0, 0, 0, 0.42));
+}
+
+.flash-effect {
+  position: absolute;
+  z-index: 999;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.08s ease;
+}
+
+.flash-effect.active {
+  opacity: 1;
+}
+
+.screamer {
+  position: absolute;
+  z-index: 1000;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: #050000;
+  color: #ff1f1f;
+  font-size: min(22vw, 170px);
+  font-weight: 900;
+  letter-spacing: 0.06em;
+}
+
+.screamer.active {
+  display: grid;
+}
+
+@media (max-width: 720px) {
+  .menu {
+    grid-template-columns: 1fr;
+  }
+
+  .arena {
+    min-height: 520px;
+  }
+}

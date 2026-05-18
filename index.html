@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reaction Slice</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app">
+    <section class="hero">
+      <p class="eyebrow">Browser arcade game</p>
+      <h1>Reaction Slice</h1>
+      <p class="subtitle">Тест реакции и аркадный режим в стиле Fruit Ninja.</p>
+    </section>
+
+    <section class="menu" id="menu">
+      <button class="mode-card" id="reactionModeBtn">
+        <span>⚡</span>
+        <strong>Тест реакции</strong>
+        <small>Жди зелёный цвет и жми быстрее всех</small>
+      </button>
+
+      <button class="mode-card" id="arcadeModeBtn">
+        <span>🍉</span>
+        <strong>Аркада</strong>
+        <small>Лови предметы, избегай ловушек и ставь рекорды</small>
+      </button>
+    </section>
+
+    <section class="panel hidden" id="reactionPanel">
+      <div class="topline">
+        <button class="ghost-btn" data-back>← Назад</button>
+        <h2>Тест реакции</h2>
+      </div>
+
+      <p class="hint">Нажми «Старт», дождись зелёной кнопки и кликни как можно быстрее.</p>
+      <button class="reaction-button" id="reactionButton">Старт</button>
+      <div class="result" id="reactionResult">Результат появится здесь</div>
+    </section>
+
+    <section class="panel hidden" id="arcadePanel">
+      <div class="topline">
+        <button class="ghost-btn" data-back>← Назад</button>
+        <h2>Аркада</h2>
+      </div>
+
+      <div class="hud">
+        <div>Очки: <strong id="score">0</strong></div>
+        <div>HP: <strong id="hp">3</strong></div>
+        <div>Рекорд: <strong id="bestScore">0</strong></div>
+      </div>
+
+      <div class="arena" id="arena">
+        <div class="arena-message" id="arenaMessage">
+          <strong>Аркадный режим</strong>
+          <span>Сначала вылетает по 1–2 медленных предмета, дальше пачки становятся больше и быстрее.</span>
+          <button class="primary-btn" id="startArcadeBtn">Начать</button>
+        </div>
+        <div class="flash-effect" id="flashEffect"></div>
+        <div class="screamer" id="screamer">БУ!</div>
+      </div>
+
+      <p class="legend">
+        ✅ обычные предметы дают очки · 💣 бомбы отнимают HP · 💾 флешка слепит · ❤️ хилка лечит · 👁 проклятый предмет вызывает скример
+      </p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
