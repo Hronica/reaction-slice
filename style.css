@@ -270,22 +270,17 @@ h1 {
 }
 
 .item--flash {
-  background:
-    radial-gradient(circle at 35% 25%, rgba(255,255,255,0.95), rgba(155,170,178,0.9) 45%, rgba(38,46,55,0.95) 100%);
-  border-radius: 50%;
-  overflow: hidden;
-  padding: calc(var(--size) * 0.12);
-  box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.72),
-    0 10px 30px rgba(255, 255, 255, 0.34);
+  background: transparent;
+  border-radius: 0;
+  overflow: visible;
 }
 
 .item--flash img {
-  width: 100%;
-  height: 100%;
+  width: 140%;
+  height: 140%;
   object-fit: contain;
   pointer-events: none;
-  filter: drop-shadow(0 7px 9px rgba(0, 0, 0, 0.42));
+  filter: drop-shadow(0 12px 18px rgba(255, 255, 255, 0.28));
 }
 
 .flash-effect {
@@ -327,4 +322,115 @@ h1 {
   .arena {
     min-height: 520px;
   }
+}
+
+
+/* VFX update: blade trail, split particles, shake */
+.blade-trail {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 24px;
+  height: 24px;
+  z-index: 2000;
+  border-radius: 999px;
+  background: rgba(70, 238, 255, 0.72);
+  box-shadow:
+    0 0 12px rgba(70, 238, 255, 0.95),
+    0 0 28px rgba(70, 238, 255, 0.82),
+    0 0 54px rgba(124, 92, 255, 0.68);
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  transition: opacity 0.18s ease, width 0.08s ease, height 0.08s ease;
+}
+
+.blade-trail.active {
+  opacity: 1;
+}
+
+.blade-trail.fast {
+  width: 38px;
+  height: 38px;
+}
+
+.slice-particle {
+  position: absolute;
+  z-index: 8;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  pointer-events: none;
+  background: #ffad2f;
+  box-shadow: 0 0 16px rgba(255, 173, 47, 0.9);
+}
+
+.slice-half {
+  position: absolute;
+  z-index: 9;
+  width: var(--half-size);
+  height: var(--half-size);
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  font-size: calc(var(--half-size) * 0.56);
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translate(-50%, -50%);
+}
+
+.slice-half--normal {
+  background: radial-gradient(circle at 35% 25%, #fff89a, #ff9b21 46%, #a94316 100%);
+  box-shadow: 0 10px 26px rgba(255, 139, 29, 0.34);
+}
+
+.slice-half--heal {
+  background: radial-gradient(circle at 35% 25%, #d8ffe4, #38e379 48%, #137a3b 100%);
+  box-shadow: 0 10px 30px rgba(50, 235, 116, 0.38);
+}
+
+.screen-shake {
+  animation: screenShake 0.22s linear;
+}
+
+@keyframes screenShake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-7px, 5px); }
+  40% { transform: translate(7px, -5px); }
+  60% { transform: translate(-5px, -3px); }
+  80% { transform: translate(4px, 3px); }
+  100% { transform: translate(0, 0); }
+}
+
+
+.flash-effect.active {
+  opacity: 1 !important;
+  backdrop-filter: blur(16px);
+}
+
+
+.screamer {
+  position: absolute;
+  z-index: 5000;
+  inset: 0;
+  display: none;
+  place-items: center;
+  background: #000;
+}
+
+.screamer.active {
+  display: grid;
+  animation: screamerFlash 0.12s infinite alternate;
+}
+
+.screamer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes screamerFlash {
+  from { filter: brightness(0.9) contrast(1); }
+  to { filter: brightness(1.25) contrast(1.3); }
 }

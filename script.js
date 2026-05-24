@@ -16,6 +16,184 @@ const hpEl = document.querySelector("#hp");
 const bestScoreEl = document.querySelector("#bestScore");
 const flashEffect = document.querySelector("#flashEffect");
 const screamer = document.querySelector("#screamer");
+const bladeTrail = document.querySelector("#bladeTrail");
+
+const arcadeMusic = new Audio("assets/arcade-music.wav");
+arcadeMusic.loop = true;
+arcadeMusic.volume = 0.22;
+
+const flashbangSound = new Audio("assets/flashbang.mp3");
+flashbangSound.volume = 0.6;
+
+const screamerSound = new Audio("assets/screamer.mp3");
+screamerSound.volume = 0.85;
+
+
+
+let lastPointerX = 0;
+let lastPointerY = 0;
+let lastPointerTime = 0;
+let bladeHideTimer = null;
+
+document.addEventListener("pointermove", (event) => {
+  if (!bladeTrail) return;
+
+  const now = performance.now();
+  const dx = event.clientX - lastPointerX;
+  const dy = event.clientY - lastPointerY;
+  const dt = Math.max(now - lastPointerTime, 16);
+  const pointerSpeed = Math.hypot(dx, dy) / dt;
+
+  bladeTrail.style.left = `${event.clientX}px`;
+  bladeTrail.style.top = `${event.clientY}px`;
+  bladeTrail.classList.add("active");
+  bladeTrail.classList.toggle("fast", pointerSpeed > 1.2);
+
+  lastPointerX = event.clientX;
+  lastPointerY = event.clientY;
+  lastPointerTime = now;
+
+  clearTimeout(bladeHideTimer);
+  bladeHideTimer = setTimeout(() => {
+    bladeTrail.classList.remove("active", "fast");
+  }, 140);
+});
+
+function playVfxSound(type) {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+
+    if (type === "slice") {
+      oscillator.type = "triangle";
+      oscillator.frequency.setValueAtTime(760, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(320, context.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.035, context.currentTime);
+    }
+
+    if (type === "bomb") {
+      oscillator.type = "sawtooth";
+      oscillator.frequency.setValueAtTime(110, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(55, context.currentTime + 0.13);
+      gain.gain.setValueAtTime(0.055, context.currentTime);
+    }
+
+    if (type === "flash") {
+      oscillator.type = "sine";
+      oscillator.frequency.setValueAtTime(980, context.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(1680, context.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.028, context.currentTime);
+    }
+
+    gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.14);
+    oscillator.start();
+    oscillator.stop(context.currentTime + 0.15);
+  } catch (error) {
+    // Sound is optional. Some browsers block it before user interaction.
+  }
+}
+
+function shakeScreen() {
+  arena.classList.remove("screen-shake");
+  void arena.offsetWidth;
+  arena.classList.add("screen-shake");
+}
+
+function createSliceParticles(x, y, type = "normal") {
+  const particleColor = type === "heal" ? "#48ff8d" : "#ffad2f";
+
+  for (let i = 0; i < 12; i++) {
+    const particle = document.createElement("span");
+    particle.className = "slice-particle";
+    particle.style.left = `${x}px`;
+    particle.style.top = `${y}px`;
+    particle.style.background = particleColor;
+    arena.appendChild(particle);
+
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 2.4 + Math.random() * 5.6;
+    let vx = Math.cos(angle) * speed;
+    let vy = Math.sin(angle) * speed;
+    let life = 26 + Math.random() * 10;
+
+    function animateParticle() {
+      life -= 1;
+      vx *= 0.97;
+      vy = vy * 0.97 + 0.08;
+
+      const currentX = parseFloat(particle.style.left);
+      const currentY = parseFloat(particle.style.top);
+
+      particle.style.left = `${currentX + vx}px`;
+      particle.style.top = `${currentY + vy}px`;
+      particle.style.opacity = `${Math.max(life / 34, 0)}`;
+      particle.style.transform = `scale(${Math.max(life / 34, 0.25)})`;
+
+      if (life > 0) {
+        requestAnimationFrame(animateParticle);
+      } else {
+        particle.remove();
+      }
+    }
+
+    animateParticle();
+  }
+}
+
+function createSplitEffect(item) {
+  if (item.type !== "normal" && item.type !== "heal") return;
+
+  const rect = arena.getBoundingClientRect();
+  const x = item.x;
+  const y = item.y;
+  const icon = item.el.textContent || (item.type === "heal" ? "❤️" : "🍉");
+  const halfSize = Math.max(item.size * 0.72, 38);
+
+  for (const side of [-1, 1]) {
+    const half = document.createElement("span");
+    half.className = `slice-half slice-half--${item.type}`;
+    half.style.setProperty("--half-size", `${halfSize}px`);
+    half.textContent = icon;
+    half.style.left = `${x}px`;
+    half.style.top = `${y}px`;
+    arena.appendChild(half);
+
+    let vx = side * (3.2 + Math.random() * 2.6);
+    let vy = -3.8 - Math.random() * 1.6;
+    let rotation = 0;
+    let life = 42;
+
+    function animateHalf() {
+      life -= 1;
+      vy += 0.18;
+      const currentX = parseFloat(half.style.left);
+      const currentY = parseFloat(half.style.top);
+
+      half.style.left = `${currentX + vx}px`;
+      half.style.top = `${currentY + vy}px`;
+      rotation += side * 9;
+      half.style.opacity = `${Math.max(life / 42, 0)}`;
+      half.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${0.78 + life / 170})`;
+
+      if (life > 0) {
+        requestAnimationFrame(animateHalf);
+      } else {
+        half.remove();
+      }
+    }
+
+    animateHalf();
+  }
+
+  createSliceParticles(x, y, item.type);
+}
 
 let reactionTimer = null;
 let reactionStart = 0;
@@ -222,27 +400,44 @@ function hitItem(item) {
 
   if (item.type === "normal") {
     arcade.score += 10;
+    createSplitEffect(item);
+    playVfxSound("slice");
   }
 
   if (item.type === "bomb") {
     arcade.hp -= 1;
+    shakeScreen();
+    playVfxSound("bomb");
   }
 
   if (item.type === "heal") {
     arcade.hp = Math.min(3, arcade.hp + 1);
     arcade.score += 5;
+    createSplitEffect(item);
+    playVfxSound("slice");
   }
 
   if (item.type === "flash") {
     arcade.score += 5;
+    flashbangSound.currentTime = 0;
+    flashbangSound.play().catch(() => {});
+    shakeScreen();
     flashEffect.classList.add("active");
     setTimeout(() => flashEffect.classList.remove("active"), 900);
   }
 
   if (item.type === "curse") {
     arcade.score += 3;
+    shakeScreen();
+
+    screamerSound.currentTime = 0;
+    screamerSound.play().catch(() => {});
+
     screamer.classList.add("active");
-    setTimeout(() => screamer.classList.remove("active"), 700);
+
+    setTimeout(() => {
+      screamer.classList.remove("active");
+    }, 1200);
   }
 
   item.el.remove();
@@ -274,6 +469,10 @@ function startArcade() {
 
   updateHud();
   arenaMessage.classList.add("hidden");
+
+  arcadeMusic.currentTime = 0;
+  arcadeMusic.play().catch(() => {});
+
   arcade.animationId = requestAnimationFrame(loopArcade);
 }
 
@@ -282,6 +481,9 @@ function stopArcade() {
   arcade.items?.forEach((item) => item.el.remove());
   arcade.running = false;
   arcade.items = [];
+
+  arcadeMusic.pause();
+  arcadeMusic.currentTime = 0;
 }
 
 function endArcade() {
