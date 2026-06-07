@@ -96,7 +96,6 @@ function playVfxSound(type) {
     oscillator.start();
     oscillator.stop(context.currentTime + 0.15);
   } catch (error) {
-    // Sound is optional. Some browsers block it before user interaction.
   }
 }
 
@@ -446,7 +445,6 @@ function createWave() {
   const count = getWaveCount(diff);
 
   for (let i = 0; i < count; i++) {
-    // Маленькая задержка между предметами в пачке, чтобы они не спавнились идеально в одну точку.
     setTimeout(() => {
       if (arcade.running) createItem(pickType(diff, i), i, count);
     }, i * (95 + Math.random() * 80));
