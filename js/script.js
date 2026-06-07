@@ -419,7 +419,6 @@ function difficulty() {
 }
 
 function getWaveCount(diff) {
-  // Первые секунды спокойно. Потом чаще вылетает по 2, дальше 3–5 за волну.
   const s = diff.seconds;
   const r = Math.random();
 
@@ -496,7 +495,7 @@ function createItem(forcedType = "normal", indexInWave = 0, waveCount = 1) {
   };
 
   if (type === "flash") {
-    el.innerHTML = `<img src="assets/flashbang.png" alt="flashbang">`;
+    el.innerHTML = `<img src="assets/flashbang.png" alt="">`;
   } else {
     el.textContent = icon[type];
   }
