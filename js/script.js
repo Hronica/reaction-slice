@@ -18,14 +18,14 @@ const flashEffect = document.querySelector("#flashEffect");
 const screamer = document.querySelector("#screamer");
 const bladeTrail = document.querySelector("#bladeTrail");
 
-const arcadeMusic = new Audio("../assets/arcade-music.wav");
+const arcadeMusic = new Audio("assets/arcade-music.wav");
 arcadeMusic.loop = true;
 arcadeMusic.volume = 0.22;
 
-const flashbangSound = new Audio("../assets/flashbang.mp3");
+const flashbangSound = new Audio("assets/flashbang.mp3");
 flashbangSound.volume = 0.6;
 
-const screamerSound = new Audio("../assets/screamer.mp3");
+const screamerSound = new Audio("assets/screamer.mp3");
 screamerSound.volume = 0.85;
 
 
