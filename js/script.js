@@ -496,7 +496,7 @@ function createItem(forcedType = "normal", indexInWave = 0, waveCount = 1) {
   };
 
   if (type === "flash") {
-    el.innerHTML = `<img src="../assets/flashbang.png" alt="flashbang">`;
+    el.innerHTML = `<img src="assets/flashbang.png" alt="flashbang">`;
   } else {
     el.textContent = icon[type];
   }
