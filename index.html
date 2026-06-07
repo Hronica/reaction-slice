@@ -4,9 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Reaction Slice</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
+  <button class="theme-toggle-global" id="globalThemeToggleBtn" type="button">Светлая тема</button>
   <div class="blade-trail" id="bladeTrail"></div>
   <main class="app">
     <section class="hero">
@@ -52,6 +53,42 @@
         <div>Рекорд: <strong id="bestScore">0</strong></div>
       </div>
 
+      <div class="game-toolbar">
+        <button class="ghost-btn" id="pauseArcadeBtn" type="button" disabled>Пауза</button>
+        <button class="ghost-btn" id="loadTipsBtn" type="button">Загрузить советы</button>
+      </div>
+
+      <form class="settings-form" id="gameSettingsForm">
+        <label>
+          Сложность
+          <select id="difficultySelect">
+            <option value="easy">Easy</option>
+            <option value="normal" selected>Normal</option>
+            <option value="hard">Hard</option>
+          </select>
+        </label>
+
+        <label>
+          Стартовое HP
+          <select id="startHpSelect">
+            <option value="3" selected>3 HP</option>
+            <option value="4">4 HP</option>
+            <option value="5">5 HP</option>
+          </select>
+        </label>
+
+        <label>
+          Музыка
+          <input id="musicVolumeRange" type="range" min="0" max="100" value="22">
+        </label>
+
+        <div class="settings-summary" id="settingsSummary">
+          Normal · 3 HP · speed x1.0
+        </div>
+      </form>
+
+      <div class="tips-box" id="tipsBox" hidden></div>
+
       <div class="arena" id="arena">
         <div class="arena-message" id="arenaMessage">
           <strong>Аркадный режим</strong>
@@ -68,6 +105,6 @@
     </section>
   </main>
 
-  <script src="script.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
